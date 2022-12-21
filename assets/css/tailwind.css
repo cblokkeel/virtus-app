@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Utils */
+
+body {
+  font-family: 'Baloo Thambi 2', cursive;
+}
+
+.wrapper {
+  @apply max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-7xl mx-auto;
+}
+
+.cta {
+  @apply bg-lemonCurry-light text-charcoal px-12 py-3 text-lg font-bold cursor-pointer;
+}
+
+/* Header */
+
+.nav-link {
+  @apply text-lemonCurry text-xl font-bold cursor-pointer;
+}
