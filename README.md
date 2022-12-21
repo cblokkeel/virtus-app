@@ -12,16 +12,20 @@ Yarn :
 
 ```
 yarn install
+yarn dev
 ```
 
 Npm :
 
 ```
 npm install
+npm run dev
 ```
 
 Pnpm : 
 
 ```
 pnpm install --shamefully-hoist
+pnpm run dev
 ```
+
