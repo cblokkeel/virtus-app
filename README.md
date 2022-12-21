@@ -1,42 +1,27 @@
-# Nuxt 3 Minimal Starter
+# Virtus
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Description
 
-## Setup
+Welcome to virtus-app repo
+Virtus is an app to keep track of your workout progress.
+The app let you add your custom workout program, start exercise and visualize your progress over time.
 
-Make sure to install the dependencies:
+## Install
 
-```bash
-# yarn
+Yarn :
+
+```
 yarn install
+```
 
-# npm
+Npm :
+
+```
 npm install
+```
 
-# pnpm
+Pnpm : 
+
+```
 pnpm install --shamefully-hoist
 ```
-
-## Development Server
-
-Start the development server on http://localhost:3000
-
-```bash
-npm run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
