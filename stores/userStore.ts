@@ -1,3 +1,4 @@
+import { PriceIdEnum } from './../lib/enums/index.d';
 import { defineStore } from 'pinia';
 
 interface UserStoreState {
@@ -38,9 +39,12 @@ export const useUserStore = defineStore('users', {
     async loadIsSubscribed() {
       this.subscribed = await $fetch('/api/users/isSubscribed');
     },
-    async handleSubscription() {
+    async handleSubscription(priceId: PriceIdEnum) {
       this.subscribed = await $fetch('/api/subscription/subscribe', {
         method: 'POST',
+        body: {
+          id: priceId,
+        },
       });
     },
     async handleUnsubscription() {

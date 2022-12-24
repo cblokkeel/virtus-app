@@ -1,6 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@pinia/nuxt', '@nuxtjs/tailwindcss', '@sidebase/nuxt-auth'],
+  modules: [
+    '@pinia/nuxt',
+    '@nuxtjs/tailwindcss',
+    '@sidebase/nuxt-auth',
+    '@nuxt/image-edge',
+  ],
   app: {
     head: {
       link: [
@@ -17,10 +22,18 @@ export default defineNuxtConfig({
   },
   auth: {
     isEnabled: true,
-    origin: process.env.NUXT_AUTH_ORIGIN,
+    origin: process.env.APP_DOMAIN,
     basePath: process.env.NUXT_AUTH_BASE_PATH,
     enableSessionRefreshPeriodically: false,
     enableSessionRefreshOnWindowFocus: true,
     enableGlobalAppMiddleware: false,
+  },
+  runtimeConfig: {
+    public: {
+      appDomain: process.env.APP_DOMAIN,
+    },
+    secret: {
+      stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    },
   },
 });

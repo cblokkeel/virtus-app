@@ -9,12 +9,13 @@
 </template>
 
 <script setup lang="ts">
+import { PriceIdEnum } from '~~/lib/enums';
 import { useUserStore } from '~~/stores/userStore';
 
 const userStore = useUserStore();
 
 const handleSubscribe = async () => {
-  await userStore.handleSubscription();
+  await userStore.handleSubscription(PriceIdEnum.MONTHLY);
 };
 
 const isUserSubscribed = computed(() => {

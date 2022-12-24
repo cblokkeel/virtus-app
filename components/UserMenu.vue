@@ -3,11 +3,14 @@
   <Menu as="div" class="relative inline-block text-left">
     <div>
       <MenuButton>
-        <img
-          class="inline-block h-14 w-14 rounded-full ring-2 ring-white cursor-pointer"
+        <!-- <img
           :src="imageUrl"
           alt="User profile picture"
-        />
+        /> -->
+        <nuxt-img
+          class="inline-block h-14 w-14 rounded-full ring-2 ring-white cursor-pointer"
+          :src="imageUrl"
+        ></nuxt-img>
       </MenuButton>
     </div>
 
