@@ -4,7 +4,7 @@ import { SubscriptionSchema } from '~~/server/app/schemas/subscription.schema';
 import { getSubscriptionUrl } from '~~/server/app/services/stripeService';
 import { updateStripeCustomerId } from '~~/server/database/repositories/usersRepository';
 
-export default defineEventHandler(async (event): Promise<boolean> => {
+export default defineEventHandler(async (event) => {
   const { priceId } = await zh.useValidatedBody(event, SubscriptionSchema);
   const session = await getServerSession(event);
 
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event): Promise<boolean> => {
 
   const user = await updateStripeCustomerId(email, stripeCustomerId);
 
-  await sendRedirect(event, url);
+  await sendRedirect(event, 'https://google.com');
 
-  return user !== null;
+  // return user !== null;
 });

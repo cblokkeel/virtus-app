@@ -32,7 +32,7 @@ export default defineNuxtConfig({
     public: {
       appDomain: process.env.APP_DOMAIN,
     },
-    secret: {
+    private: {
       stripeSecretKey: process.env.STRIPE_SECRET_KEY,
     },
   },

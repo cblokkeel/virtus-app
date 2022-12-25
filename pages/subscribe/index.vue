@@ -2,7 +2,7 @@
   <div>
     <h1>S'abonner</h1>
     <button v-if="!isUserSubscribed" class="cta" @click="handleSubscribe">
-      S'abonner ma gueule
+      S'abonner
     </button>
     <p v-else>Vous êtes déjà abonné</p>
   </div>
