@@ -1,7 +1,11 @@
 import { getServerSession } from '#auth';
-import { newSubscription } from '~~/server/app/services/subscriptionService';
+import * as zh from 'h3-zod';
+import { SubscriptionSchema } from '~~/server/app/schemas/subscription.schema';
+import { getSubscriptionUrl } from '~~/server/app/services/stripeService';
+import { updateStripeCustomerId } from '~~/server/database/repositories/usersRepository';
 
 export default defineEventHandler(async (event): Promise<boolean> => {
+  const { priceId } = await zh.useValidatedBody(event, SubscriptionSchema);
   const session = await getServerSession(event);
 
   if (!session || !session.user || !session.user.email) {
@@ -10,7 +14,11 @@ export default defineEventHandler(async (event): Promise<boolean> => {
 
   const { email } = session.user;
 
-  const user = await newSubscription(email);
+  const { url, stripeCustomerId } = await getSubscriptionUrl(priceId, email);
+
+  const user = await updateStripeCustomerId(email, stripeCustomerId);
+
+  await sendRedirect(event, url);
 
   return user !== null;
 });

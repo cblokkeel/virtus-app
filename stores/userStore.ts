@@ -1,4 +1,4 @@
-import { PriceIdEnum } from './../lib/enums/index.d';
+import { PriceIdEnum } from '~~/lib/enums';
 import { defineStore } from 'pinia';
 
 interface UserStoreState {

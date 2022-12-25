@@ -5,7 +5,10 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "generate-prisma": "npx prisma generate --schema=./server/database/schema.prisma",
+    "migrate-prisma": "npx prisma migrate dev --schema=./server/database/schema.prisma",
+    "db-push-prisma": "npx prisma db push --schema=./server/database/schema.prisma"
   },
   "devDependencies": {
     "@nuxt/image-edge": "^1.0.0-27840416.dc1ed65",

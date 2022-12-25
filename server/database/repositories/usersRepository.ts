@@ -22,3 +22,13 @@ export const unsubscribeUser = async (email: string): Promise<User | null> => {
     data: { subscribed: false },
   });
 };
+
+export const updateStripeCustomerId = async (
+  email: string,
+  customerId: string,
+) => {
+  return await prisma.user.update({
+    where: { email },
+    data: { stripeCustomerId: customerId },
+  });
+};

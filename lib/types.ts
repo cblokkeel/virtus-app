@@ -15,5 +15,5 @@ export interface MenuLinks {
   section: number;
   action?: () => void;
   link?: string;
-  red?: boolean = false;
+  red?: boolean;
 }
