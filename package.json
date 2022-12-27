@@ -5,10 +5,10 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare && yarn generate-prisma",
-    "generate-prisma": "npx prisma generate --schema=./server/database/schema.prisma",
-    "migrate-prisma": "npx prisma migrate dev --schema=./server/database/schema.prisma",
-    "db-push-prisma": "npx prisma db push --schema=./server/database/schema.prisma"
+    "postinstall": "nuxt prepare && yarn prisma generate",
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:db-push": "npx prisma db push"
   },
   "devDependencies": {
     "@nuxt/image-edge": "^1.0.0-27840416.dc1ed65",
@@ -20,10 +20,14 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.7",
     "@next-auth/prisma-adapter": "^1.0.5",
+    "@nozomuikuta/h3-cors": "^0.2.0",
     "@pinia/nuxt": "^0.4.6",
     "@prisma/client": "4.7.1",
     "h3-zod": "^0.3.10",
     "stripe": "^11.5.0",
     "zod": "^3.19.1"
+  },
+  "prisma": {
+    "schema": "server/database/schema.prisma"
   }
 }

@@ -1,4 +1,7 @@
 import { Stripe } from 'stripe';
+import subscribePost from '~~/server/api/subscription/subscribe.post';
+import { getStripeCustomerId } from '~~/server/database/repositories/usersRepository';
+import { hasSubscriberId } from './usersService';
 
 const runtimeConfig = useRuntimeConfig();
 // @ts-ignore
@@ -7,10 +10,22 @@ const stripe = new Stripe(runtimeConfig.private.stripeSecretKey, null);
 export const getSubscriptionUrl = async (
   priceId: string,
   email: string,
-): Promise<{ url: string; stripeCustomerId: string }> => {
+): Promise<{
+  url: string;
+  stripeCustomerId: string;
+  isNewCustomer: boolean;
+}> => {
   const price = await stripe.prices.retrieve(priceId);
 
-  const customer = await stripe.customers.create({ email });
+  const doesUserHasASubscriberId = await hasSubscriberId(email);
+
+  console.log('doesUserHasASubscriberId', doesUserHasASubscriberId);
+
+  const customer = doesUserHasASubscriberId
+    ? await stripe.customers.retrieve((await getStripeCustomerId(email)) || '')
+    : await stripe.customers.create({ email });
+
+  console.log('customer', customer);
 
   const session = await stripe.checkout.sessions.create({
     billing_address_collection: 'auto',
@@ -33,5 +48,9 @@ export const getSubscriptionUrl = async (
     });
   }
 
-  return { url: session.url, stripeCustomerId: customer.id };
+  return {
+    url: session.url,
+    stripeCustomerId: customer.id,
+    isNewCustomer: !doesUserHasASubscriberId,
+  };
 };

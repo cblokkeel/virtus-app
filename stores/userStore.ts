@@ -39,19 +39,5 @@ export const useUserStore = defineStore('users', {
     async loadIsSubscribed() {
       this.subscribed = await $fetch('/api/users/isSubscribed');
     },
-    async handleSubscription(priceId: PriceIdEnum) {
-      await $fetch('/api/subscription/subscribe', {
-        method: 'POST',
-        body: {
-          priceId,
-        },
-      });
-      this.subscribed = true;
-    },
-    async handleUnsubscription() {
-      this.subscribed = !(await $fetch('/api/subscription/unsubscribe', {
-        method: 'POST',
-      }));
-    },
   },
 });

@@ -20,6 +20,12 @@ export default defineNuxtConfig({
       ],
     },
   },
+  routeRules: {
+    '/api/subscribe': {
+      cors: true,
+      headers: { 'Access-Control-Allow-Origin': '*' },
+    },
+  },
   auth: {
     isEnabled: true,
     origin: process.env.APP_DOMAIN,

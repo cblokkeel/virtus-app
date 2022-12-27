@@ -14,11 +14,14 @@ export default defineEventHandler(async (event) => {
 
   const { email } = session.user;
 
-  const { url, stripeCustomerId } = await getSubscriptionUrl(priceId, email);
+  const { url, stripeCustomerId, isNewCustomer } = await getSubscriptionUrl(
+    priceId,
+    email,
+  );
 
-  const user = await updateStripeCustomerId(email, stripeCustomerId);
+  if (isNewCustomer) {
+    await updateStripeCustomerId(email, stripeCustomerId);
+  }
 
-  await sendRedirect(event, 'https://google.com');
-
-  // return user !== null;
+  await sendRedirect(event, url);
 });
