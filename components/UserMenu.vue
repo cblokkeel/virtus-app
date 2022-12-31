@@ -3,10 +3,6 @@
   <Menu as="div" class="relative inline-block text-left">
     <div>
       <MenuButton>
-        <!-- <img
-          :src="imageUrl"
-          alt="User profile picture"
-        /> -->
         <nuxt-img
           class="inline-block h-14 w-14 rounded-full ring-2 ring-white cursor-pointer"
           :src="imageUrl"
@@ -68,7 +64,7 @@ const handleLogout = async () => {
 };
 
 const handleUnsubscribe = async () => {
-  await userStore.handleUnsubscription();
+  // await userStore.handleUnsubscription();
 };
 
 const menuLinks: MenuLinks[] = [
@@ -76,6 +72,12 @@ const menuLinks: MenuLinks[] = [
     name: 'options',
     label: 'Options',
     section: 1,
+  },
+  {
+    name: 'manageSubscription',
+    label: 'Modifier son abonnement',
+    section: 1,
+    link: '/subscribe/manage',
   },
   {
     name: 'unsubscribe',

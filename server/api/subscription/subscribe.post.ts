@@ -1,16 +1,18 @@
 import { getServerSession } from '#auth';
 import * as zh from 'h3-zod';
-import { SubscriptionSchema } from '~~/server/app/schemas/subscription.schema';
+import { SubscribeSchema } from '~~/server/app/schemas/subscription/subscribe.schema';
 import { getSubscriptionUrl } from '~~/server/app/services/stripeService';
 import { updateStripeCustomerId } from '~~/server/database/repositories/usersRepository';
 
 export default defineEventHandler(async (event) => {
-  const { priceId } = await zh.useValidatedBody(event, SubscriptionSchema);
+  const { priceId } = await zh.useValidatedBody(event, SubscribeSchema);
   const session = await getServerSession(event);
 
   if (!session || !session.user || !session.user.email) {
     throw createError({ statusMessage: 'Unauthenticated', statusCode: 403 });
   }
+
+  // TODO: check if user is already subscribed
 
   const { email } = session.user;
 
@@ -23,5 +25,5 @@ export default defineEventHandler(async (event) => {
     await updateStripeCustomerId(email, stripeCustomerId);
   }
 
-  await sendRedirect(event, url);
+  return await sendRedirect(event, url);
 });

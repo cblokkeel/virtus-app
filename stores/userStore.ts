@@ -1,4 +1,3 @@
-import { PriceIdEnum } from '~~/lib/enums';
 import { defineStore } from 'pinia';
 
 interface UserStoreState {

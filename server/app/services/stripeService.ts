@@ -1,11 +1,8 @@
-import { Stripe } from 'stripe';
-import subscribePost from '~~/server/api/subscription/subscribe.post';
 import { getStripeCustomerId } from '~~/server/database/repositories/usersRepository';
+import { stripe } from '~~/server/utils/stripe';
 import { hasSubscriberId } from './usersService';
 
 const runtimeConfig = useRuntimeConfig();
-// @ts-ignore
-const stripe = new Stripe(runtimeConfig.private.stripeSecretKey, null);
 
 export const getSubscriptionUrl = async (
   priceId: string,
@@ -19,13 +16,9 @@ export const getSubscriptionUrl = async (
 
   const doesUserHasASubscriberId = await hasSubscriberId(email);
 
-  console.log('doesUserHasASubscriberId', doesUserHasASubscriberId);
-
   const customer = doesUserHasASubscriberId
     ? await stripe.customers.retrieve((await getStripeCustomerId(email)) || '')
     : await stripe.customers.create({ email });
-
-  console.log('customer', customer);
 
   const session = await stripe.checkout.sessions.create({
     billing_address_collection: 'auto',
@@ -37,8 +30,8 @@ export const getSubscriptionUrl = async (
       },
     ],
     mode: 'subscription',
-    success_url: `${runtimeConfig.public.appDomain}/subscribe/success?sessionId={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${runtimeConfig.public.appDomain}/subscribe/cancel`,
+    success_url: `${runtimeConfig.public.appDomain}/subscribe/`,
+    cancel_url: runtimeConfig.public.appDomain,
   });
 
   if (!session || !session.url) {
@@ -53,4 +46,29 @@ export const getSubscriptionUrl = async (
     stripeCustomerId: customer.id,
     isNewCustomer: !doesUserHasASubscriberId,
   };
+};
+
+export const getPortalUrl = async (email: string): Promise<string> => {
+  const customerId = await getStripeCustomerId(email);
+
+  if (!customerId) {
+    throw createError({
+      statusMessage: 'User not subscribed',
+      statusCode: 401,
+    });
+  }
+
+  const portalSession = await stripe.billingPortal.sessions.create({
+    customer: customerId,
+    return_url: `${runtimeConfig.public.appDomain}/subscribe/manage`,
+  });
+
+  if (!portalSession || !portalSession.url) {
+    throw createError({
+      statusMessage: 'Could not create portal session',
+      statusCode: 500,
+    });
+  }
+
+  return portalSession.url;
 };
