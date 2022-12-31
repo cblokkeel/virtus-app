@@ -1,7 +1,10 @@
 import { getServerSession } from '#auth';
 import * as zh from 'h3-zod';
 import { SubscribeSchema } from '~~/server/app/schemas/subscription/subscribe.schema';
-import { getSubscriptionUrl } from '~~/server/app/services/stripeService';
+import {
+  getSubscriptionUrl,
+  isUserSubscribed,
+} from '~~/server/app/services/stripeService';
 import { updateStripeCustomerId } from '~~/server/database/repositories/usersRepository';
 
 export default defineEventHandler(async (event) => {
@@ -12,7 +15,12 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusMessage: 'Unauthenticated', statusCode: 403 });
   }
 
-  // TODO: check if user is already subscribed
+  if (await isUserSubscribed(session.user.email)) {
+    throw createError({
+      statusMessage: 'User already subscribed',
+      statusCode: 400,
+    });
+  }
 
   const { email } = session.user;
 

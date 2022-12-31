@@ -51,10 +51,10 @@ export const getSubscriptionUrl = async (
 export const getPortalUrl = async (email: string): Promise<string> => {
   const customerId = await getStripeCustomerId(email);
 
-  if (!customerId) {
+  if (!customerId || !(await isUserSubscribed(email))) {
     throw createError({
       statusMessage: 'User not subscribed',
-      statusCode: 401,
+      statusCode: 400,
     });
   }
 
@@ -71,4 +71,19 @@ export const getPortalUrl = async (email: string): Promise<string> => {
   }
 
   return portalSession.url;
+};
+
+export const isUserSubscribed = async (email: string): Promise<Boolean> => {
+  const customerId = await getStripeCustomerId(email);
+
+  if (!customerId) {
+    return false;
+  }
+
+  const subscriptions = await stripe.subscriptions.list({
+    customer: customerId,
+    status: 'active',
+  });
+
+  return subscriptions.data.length > 0;
 };

@@ -1,5 +1,8 @@
 import { getServerSession } from '#auth';
-import { getPortalUrl } from '~~/server/app/services/stripeService';
+import {
+  getPortalUrl,
+  isUserSubscribed,
+} from '~~/server/app/services/stripeService';
 
 export default defineEventHandler(async (event) => {
   const session = await getServerSession(event);
@@ -8,7 +11,12 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusMessage: 'Unauthenticated', statusCode: 403 });
   }
 
-  // TODO: check if user is already subscribed
+  if (!(await isUserSubscribed(session.user.email))) {
+    throw createError({
+      statusMessage: 'User not subscribed',
+      statusCode: 400,
+    });
+  }
 
   const portalSessionUrl = await getPortalUrl(session.user.email);
 
