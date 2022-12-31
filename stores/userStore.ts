@@ -9,14 +9,12 @@ interface UserStoreState {
         readonly image?: string | undefined | null;
       }
     | undefined;
-  subscribed: boolean;
 }
 
 export const useUserStore = defineStore('users', {
   state: (): UserStoreState => ({
     status: 'loading',
     infos: {},
-    subscribed: false,
   }),
   actions: {
     loadUserInfos() {
@@ -24,7 +22,6 @@ export const useUserStore = defineStore('users', {
       this.status = status.value;
       if (data.value && data.value.user) {
         this.infos = data.value.user;
-        this.loadIsSubscribed();
       }
     },
     async login(provider = 'google') {
@@ -34,9 +31,6 @@ export const useUserStore = defineStore('users', {
     async logout() {
       const { signOut } = useSession();
       await signOut();
-    },
-    async loadIsSubscribed() {
-      this.subscribed = await $fetch('/api/users/isSubscribed');
     },
   },
 });

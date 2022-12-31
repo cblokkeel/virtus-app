@@ -49,6 +49,7 @@
 import { useUserStore } from '~~/stores/userStore';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { MenuLinks } from '~~/lib/types';
+import { useSubscriptionStore } from '~~/stores/subscriptionStore';
 
 const { imageUrl } = defineProps({
   imageUrl: {
@@ -58,13 +59,14 @@ const { imageUrl } = defineProps({
 });
 
 const userStore = useUserStore();
+const subscriptionStore = useSubscriptionStore();
 
 const handleLogout = async () => {
   await userStore.logout();
 };
 
 const handleUnsubscribe = async () => {
-  // await userStore.handleUnsubscription();
+  await subscriptionStore.unsubscribe();
 };
 
 const menuLinks: MenuLinks[] = [

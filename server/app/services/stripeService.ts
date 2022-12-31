@@ -87,3 +87,30 @@ export const isUserSubscribed = async (email: string): Promise<Boolean> => {
 
   return subscriptions.data.length > 0;
 };
+
+export const cancelSubscription = async (email: string): Promise<Boolean> => {
+  const customerId = await getStripeCustomerId(email);
+
+  if (!customerId) {
+    throw createError({
+      statusMessage: 'User not subscribed',
+      statusCode: 400,
+    });
+  }
+
+  const subscriptions = await stripe.subscriptions.list({
+    customer: customerId,
+    status: 'active',
+  });
+
+  if (subscriptions.data.length === 0) {
+    throw createError({
+      statusMessage: 'User not subscribed',
+      statusCode: 400,
+    });
+  }
+
+  const result = await stripe.subscriptions.del(subscriptions.data[0].id);
+
+  return result.status === 'canceled';
+};

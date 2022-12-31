@@ -22,9 +22,11 @@
 
 <script setup lang="ts">
 import { NavLinks } from '~~/lib/types';
+import { useSubscriptionStore } from '~~/stores/subscriptionStore';
 import { useUserStore } from '~~/stores/userStore';
 
 const userStore = useUserStore();
+const subscriptionStore = useSubscriptionStore();
 
 const handleLogin = async () => {
   userStore.login();
@@ -98,17 +100,20 @@ const userProfilePicture = computed(() => {
 
 const filteredNavLinks = computed(() => {
   if (isUserAuthanticated.value) {
-    return navLinks.filter((link) =>
-      userStore.$state.subscribed
+    return navLinks.filter((link) => {
+      return subscriptionStore.$state.isSubscribed
         ? link.status.includes('subscribed')
-        : link.status.includes('unsubscribed'),
-    );
+        : link.status.includes('unsubscribed');
+    });
   }
+
+  console.log('chatte ');
 
   return navLinks.filter((link) => link.status.includes('unauthenticated'));
 });
 
-onMounted(() => {
+onMounted(async () => {
   userStore.loadUserInfos();
+  subscriptionStore.loadSubscription();
 });
 </script>
